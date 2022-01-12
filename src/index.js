@@ -26,7 +26,7 @@ function onSearch(event) {
     }
 
     API.fetchCountry(name)
-        .then(renderCountryList) 
+        .then(renderCountryList)
         .catch(error => {
             Notify.failure("Oops, there is no country with that name")
             refs.listCountry.innerHTML = '';
@@ -34,11 +34,10 @@ function onSearch(event) {
             return error;
         })
         .finally(() => {
-            console.log('в любом случае' );
+            console.log('в любом случае');
     })
 }
-// сдесь что то не так, а что я не могу понять 
-// оно не работает 
+
 function renderCountryList(countries) {
 
     if (countries.leangth >= 10) {
@@ -70,7 +69,7 @@ function countryCardInfo({capital, population, languages}) {
 
 function countryNameFlag({ flags, name }) {
     return `<li class="country-list__item">
-    <img class="country-list__flag" src="${flags.svg}" alt="${name.official}" width = 50px haight = 50px/>
+    <img class="country-list__flag" src="${flags.svg}" alt="${name.official}" width = 30px haight = 30px/>
     <h1 class="country-list__name">${name.official}</h1>
     </li>`
 }
