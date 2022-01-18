@@ -19,46 +19,46 @@ function onSearch(event) {
 
     const name = event.target.value.trim(); 
 
-    if (name === '') {
-        refs.listCountry.innerHTML = '';
-        refs.infoCountry.innerHTML = '';
-        return;
-    }
-
-    API.fetchCountry(name)
-        .then(renderCountryList)
-        .catch(error => {
-            Notify.failure("Oops, there is no country with that name")
-            refs.listCountry.innerHTML = '';
-            refs.infoCountry.innerHTML = '';
-            return error;
-        })
-        .finally(() => {
-            console.log('в любом случае');
-    })
-}
-
-function renderCountryList(countries) {
-
-    if (countries.leangth >= 10) {
-        Notify.info("Too many matches found. Please enter a more specific name.")
-        refs.infoCountry.innerHTML = '';
-        refs.listCountry.innerHTML = '';
-        return;
-    } else if (countries.length >= 2) { 
-        const markup = countries.map(country => countryNameFlag(country));
-        refs.infoCountry.innerHTML = '';
-        refs.listCountry.innerHTML = markup.join('');
-        return;
-    } else {
-        const markup = countries.map(country => countryCardInfo(country));
-        refs.infoCountry.innerHTML = markup.join('');
-        refs.listCountry.innerHTML = '';
-        
+    if (!name) {
+        refsCountry()
+        return
     }
     
+    API.fetchCountry(name)
+        .then(renderCountryList)
+        .catch(error)
 }
-//вынесла это все что бы не засорять основной код
+
+function renderCountryList(response) {
+
+    if (response.leangth > 10) {
+        Notify.info("Too many matches found. Please enter a more specific name.")
+        refsCountry()
+        return;
+    } else if (response.length >= 2 && response.length <= 10) {
+        const markup = response.map(country => countryNameFlag(country));
+        refs.infoCountry.innerHTML = '';
+        refs.listCountry.innerHTML = markup.join('');
+        
+    } else if (response.length === 1) {
+        const markup = response.map(country => countryCardInfo(country));
+        refs.infoCountry.innerHTML = markup.join('');
+        refs.listCountry.innerHTML = '';
+    } else return;
+    
+}
+function refsCountry() {
+    refs.infoCountry.innerHTML = '';
+    refs.listCountry.innerHTML = '';
+}
+
+function error() {
+    Notify.failure("Oops, there is no country with that name")
+    refsCountry()
+    return error;
+}
+
+
 function countryCardInfo({capital, population, languages}) {
     return `<ul class="country-info_list">
     <li class="country-info__card"><p><b>Capital: </b>${capital}</p></li>
