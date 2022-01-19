@@ -30,12 +30,8 @@ function onSearch(event) {
 }
 
 function renderCountryList(response) {
-
-    if (response.leangth > 10) {
-        Notify.info("Too many matches found. Please enter a more specific name.")
-        refsCountry()
-        return;
-    } else if (response.length >= 2 && response.length <= 10) {
+        
+    if (response.length >= 2 && response.length <= 10) {
         const markup = response.map(country => countryNameFlag(country));
         refs.infoCountry.innerHTML = '';
         refs.listCountry.innerHTML = markup.join('');
@@ -44,8 +40,10 @@ function renderCountryList(response) {
         const markup = response.map(country => countryCardInfo(country));
         refs.infoCountry.innerHTML = markup.join('');
         refs.listCountry.innerHTML = '';
-    } else return;
-    
+    } else {
+        Notify.info("Too many matches found. Please enter a more specific name.")
+        refsCountry();
+    }
 }
 function refsCountry() {
     refs.infoCountry.innerHTML = '';
