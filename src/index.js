@@ -32,19 +32,28 @@ function onSearch(event) {
 function renderCountryList(response) {
         
     if (response.length >= 2 && response.length <= 10) {
-        const markup = response.map(country => countryNameFlag(country));
+        //const markup = response.map(country => countryNameFlag(country));
+        createMarkup(response, countryNameFlag, refs.listCountry);
         refs.infoCountry.innerHTML = '';
-        refs.listCountry.innerHTML = markup.join('');
+        //refs.listCountry.innerHTML = markup.join('');
         
     } else if (response.length === 1) {
-        const markup = response.map(country => countryCardInfo(country));
-        refs.infoCountry.innerHTML = markup.join('');
+        //const markup = response.map(country => countryCardInfo(country));
+        createMarkup(response, countryCardInfo, refs.infoCountry);
+        //refs.infoCountry.innerHTML = markup.join('');
         refs.listCountry.innerHTML = '';
     } else {
         Notify.info("Too many matches found. Please enter a more specific name.")
         refsCountry();
     }
 }
+
+function createMarkup(data, template, ref) {
+    const markup = data.map(country => template(country)).join('');
+    ref.innerHTML = markup
+    return
+}
+
 function refsCountry() {
     refs.infoCountry.innerHTML = '';
     refs.listCountry.innerHTML = '';
